@@ -20,29 +20,30 @@
     <div>
       <div class="headerOfGrids">
         <span class="length">{{ lengthOflist }}</span>
-        <sortingCategory @sortSelected="sortByValue"></sortingCategory>
+        <sortingCategory @sortSelected="sortByValue" @listSelected="sortList"></sortingCategory>
       </div>
       <div id="products-card">
-        <!-- <product
+        <product
+          v-if="sortListValue == 'grid'"
           v-for="product in ListofProduct"
           :key="product.id"
           :product="product"
           id="template"
-        /> -->
-      </div>
-      <div class="showCardList">
+        />
         <product-card-list
+          v-else
           v-for="product in ListofProduct"
           :key="product.id"
           :product="product"
           class="cardList"
         ></product-card-list>
       </div>
+      <div class="showCardList"></div>
     </div>
   </div>
 </template>
 <script setup>
-// import product from '@/components/ProductCardGrid.vue'
+import product from '@/components/ProductCardGrid.vue'
 import filterProduct from '@/components/FilterProduct.vue'
 import { usefilter } from '@/composables/useFIlterCategory'
 import sortingCategory from '@/components/sortingCategory.vue'
@@ -61,6 +62,7 @@ const {
 } = usefilter()
 const ListofProduct = ref([])
 const lengthOflist = ref([])
+const sortListValue = ref('grid')
 
 watchEffect(() => {
   ListofProduct.value = newListOfProduct.value
@@ -103,6 +105,11 @@ function sortByValue(category) {
   SortOfList.value = category
   productSorting()
   console.log(category)
+}
+
+function sortList(value) {
+  sortListValue.value = value
+  console.log(sortListValue.value)
 }
 </script>
 <style scoped>
